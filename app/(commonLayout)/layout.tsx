@@ -1,11 +1,21 @@
-import React from 'react';
 
-const layout = ({children}: {children: React.ReactNode}) => {
+import Footer from "@/components/footer";
+import Navbar from "@/components/navbar";
+
+export default function Layout({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
     return (
-        <div>
-            {children}
+        <div className="min-h-screen flex flex-col w-full">
+
+            <Navbar></Navbar>
+            <main className="flex-1 min-h-screen w-full">
+                {children}
+            </main>
+
+            <Footer />
         </div>
     );
-};
-
-export default layout;
+}
