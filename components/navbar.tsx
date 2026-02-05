@@ -1,4 +1,4 @@
-// components/Navbar.tsx
+
 "use client";
 
 import { Menu } from "lucide-react";
@@ -8,12 +8,6 @@ import Image from "next/image";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -54,11 +48,11 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
 
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="relative h-9 w-9 overflow-hidden rounded-full border bg-gradient-to-br from-orange-400 to-red-500">
+          <div className="relative h-9 w-9 overflow-hidden rounded-full border bg-linear-to-br from-orange-400 to-red-500">
             <Image
               src="/logo.png"
               alt="FoodHub Logo"
@@ -130,11 +124,11 @@ export default function Navbar() {
               </Button>
             </SheetTrigger>
 
-            <SheetContent side="right" className="w-[85vw] sm:w-[380px] pr-0">
+            <SheetContent side="right" className="w-[85vw] sm:w-95 pr-0">
               <SheetHeader className="border-b pb-5">
                 <SheetTitle className="text-left">
                   <Link href="/" className="flex items-center gap-2.5">
-                    <div className="relative h-9 w-9 overflow-hidden rounded-full border bg-gradient-to-br from-orange-400 to-red-500">
+                    <div className="relative h-9 w-9 overflow-hidden rounded-full border bg-linear-to-br from-orange-400 to-red-500">
                       <Image
                         src="/logo.png"
                         alt="FoodHub Logo"

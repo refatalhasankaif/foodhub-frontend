@@ -1,4 +1,4 @@
-// components/HeroSlider.tsx
+
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -45,11 +45,10 @@ const slides = [
 export default function Slide() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // Auto slide every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    }, 5000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
@@ -59,8 +58,8 @@ export default function Slide() {
   };
 
   return (
-    <section className="relative h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden">
-      {/* Slides */}
+    <section className="relative h-125 md:h-150 lg:h-175 overflow-hidden">
+
       {slides.map((slide, index) => (
         <div
           key={slide.id}
@@ -68,16 +67,16 @@ export default function Slide() {
             currentSlide === index ? "opacity-100" : "opacity-0"
           }`}
         >
-          {/* Background Image */}
+
           <div
             className="w-full h-full bg-cover bg-center"
             style={{ backgroundImage: `url(${slide.image})` }}
           >
-            {/* Dark Overlay */}
+
             <div className="absolute inset-0 bg-black/45" />
           </div>
 
-          {/* Content */}
+
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center px-6 max-w-3xl">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-lg">
@@ -91,7 +90,7 @@ export default function Slide() {
         </div>
       ))}
 
-      {/* Dots Navigation */}
+
       <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-3 z-10">
         {slides.map((_, index) => (
           <button
