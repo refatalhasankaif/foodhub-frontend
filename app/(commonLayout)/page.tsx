@@ -1,14 +1,17 @@
 import Hero from '@/components/hero';
+import { getSession } from '@/lib/auth-server';
 import React from 'react';
 
-const page = () => {
+export default async function Page() {
+    const { data: session } = await getSession();
+    
+    console.log("Session:", session);
+    
     return (
         <div>
-            <Hero></Hero>
+            <Hero />
             
-            
+
         </div>
     );
-};
-
-export default page;
+}

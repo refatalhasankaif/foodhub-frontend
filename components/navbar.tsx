@@ -5,6 +5,8 @@ import { Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 import {
   Accordion,
@@ -42,6 +44,15 @@ const authLinks = {
 };
 
 export default function Navbar() {
+  const router = useRouter();
+  const { data: session } = authClient.useSession();
+
+  const handleLogout = async () => {
+    await authClient.signOut();
+    router.push("/");
+    router.refresh();
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
@@ -81,16 +92,33 @@ export default function Navbar() {
             </NavigationMenuList>
           </NavigationMenu>
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" asChild>
-              <Link href={authLinks.login.href}>
-                {authLinks.login.title}
-              </Link>
-            </Button>
-            <Button size="sm" className="bg-orange-600 hover:bg-orange-700" asChild>
-              <Link href={authLinks.signup.href}>
-                {authLinks.signup.title}
-              </Link>
-            </Button>
+            {session?.user ? (
+              <>
+                <span className="text-sm font-medium">
+                  {session.user.name || session.user.email}
+                </span>
+                <Button
+                  size="sm" 
+                  variant="ghost"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href={authLinks.login.href}>
+                    {authLinks.login.title}
+                  </Link>
+                </Button>
+                <Button size="sm" className="bg-orange-600 hover:bg-orange-700" asChild>
+                  <Link href={authLinks.signup.href}>
+                    {authLinks.signup.title}
+                  </Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
         <div className="lg:hidden">
@@ -133,16 +161,32 @@ export default function Navbar() {
                 </div>
 
                 <div className="flex flex-col gap-3 px-2">
-                  <Button variant="outline" asChild>
-                    <Link href={authLinks.login.href}>
-                      {authLinks.login.title}
-                    </Link>
-                  </Button>
-                  <Button className="bg-orange-600 hover:bg-orange-700" asChild>
-                    <Link href={authLinks.signup.href}>
-                      {authLinks.signup.title}
-                    </Link>
-                  </Button>
+                  {session?.user ? (
+                    <>
+                      <div className="px-2 py-3 text-base  font-medium">
+                        {session.user.name || session.user.email}
+                      </div>
+                      <Button 
+                        variant="outline"
+                        onClick={handleLogout}
+                      >
+                        Logout
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button variant="outline" asChild>
+                        <Link href={authLinks.login.href}>
+                          {authLinks.login.title}
+                        </Link>
+                      </Button>
+                      <Button className="bg-orange-600 hover:bg-orange-700" asChild>
+                        <Link href={authLinks.signup.href}>
+                          {authLinks.signup.title}
+                        </Link>
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
             </SheetContent>
