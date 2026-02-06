@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import Link from "next/link";
 
 type UserRole = "CUSTOMER" | "PROVIDER";
 
@@ -26,7 +27,7 @@ export function SignupForm() {
     const phone = formData.get("phone") as string;
     const address = formData.get("address") as string;
 
-    // Client-side validation
+
     if (!name || !email || !password || !address) {
       setErrorMsg("Please fill in all required fields");
       setIsLoading(false);
@@ -52,7 +53,7 @@ export function SignupForm() {
     }
 
     try {
-      // Use type assertion to bypass the strict type check
+
       const { data, error } = await authClient.signUp.email({
         email,
         password,
@@ -61,7 +62,7 @@ export function SignupForm() {
         phone: phone || undefined,
         address,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } as any);  // ← this line fixes the TS error
+      } as any);
 
       if (error) {
         console.error("Signup error:", error);
@@ -92,7 +93,7 @@ export function SignupForm() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Role Selection */}
+
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Account Type *
@@ -121,7 +122,7 @@ export function SignupForm() {
           </div>
         </div>
 
-        {/* Name */}
+
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Full Name *
@@ -134,7 +135,7 @@ export function SignupForm() {
           />
         </div>
 
-        {/* Email */}
+
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Email *
@@ -147,7 +148,7 @@ export function SignupForm() {
           />
         </div>
 
-        {/* Phone */}
+
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Phone {role === "PROVIDER" ? "*" : "(optional)"}
@@ -160,7 +161,7 @@ export function SignupForm() {
           />
         </div>
 
-        {/* Address */}
+
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Address *
@@ -173,7 +174,7 @@ export function SignupForm() {
           />
         </div>
 
-        {/* Password */}
+
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Password *
@@ -187,7 +188,7 @@ export function SignupForm() {
           />
         </div>
 
-        {/* Confirm Password */}
+
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Confirm Password *
@@ -201,7 +202,6 @@ export function SignupForm() {
           />
         </div>
 
-        {/* Submit */}
         <button
           type="submit"
           disabled={isLoading}
@@ -216,9 +216,9 @@ export function SignupForm() {
 
         <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-4">
           Already have an account?{" "}
-          <a href="/login" className="text-blue-600 hover:underline">
-            Sign in
-          </a>
+          <Link href="/login" className="text-blue-600 hover:underline">
+            Log in
+          </Link>
         </p>
       </form>
     </div>
