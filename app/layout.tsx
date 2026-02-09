@@ -18,18 +18,17 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children,
+    children,
 }: {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }) {
-  return (
-    <html lang="en" className=" h-full w-full">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen w-full flex flex-col`}
-      >
-        {children}
-      </body>
-    </html>
-  );
+    return (
+        <html lang="en" className="h-full w-full">
+            <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen w-full flex flex-col`}
+            suppressHydrationWarning>
+                {children}
+            </body>
+        </html>
+    );
 }
 
