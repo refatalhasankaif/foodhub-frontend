@@ -38,7 +38,7 @@ const EMPTY_FORM: MealForm = {
 
 
 async function fetchMeals(): Promise<Meal[]> {
-  const res = await fetch("/api/backend/meals", { credentials: "include" });
+  const res = await fetch("/api/backend/providers/mymeals", { credentials: "include" });
   if (!res.ok) throw new Error(`Failed to fetch meals (${res.status})`);
   return res.json();
 }
