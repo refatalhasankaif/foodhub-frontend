@@ -1,5 +1,5 @@
-// lib/session.ts
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_BASE_URL!; // https://foodhub-backend-3poi.onrender.com
+
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_BASE_URL!;
 
 export interface SessionUser {
   id: string;
@@ -35,7 +35,6 @@ export async function getSession(cookieHeader: string | null): Promise<Session |
 
     const data = await res.json();
 
-    // Better Auth returns null or {} when no session
     if (!data || !data.user) return null;
 
     return data as Session;

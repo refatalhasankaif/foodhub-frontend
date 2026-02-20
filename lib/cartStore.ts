@@ -1,4 +1,3 @@
-// lib/cartStore.ts   (or lib/store/cartStore.ts)
 
 "use client";
 

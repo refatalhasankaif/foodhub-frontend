@@ -1,4 +1,3 @@
-// proxy.ts  (root or src/)
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/session";
 
@@ -13,7 +12,6 @@ type Role = (typeof Roles)[keyof typeof Roles];
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  // Forward the cookies from the incoming request to your backend
   const cookieHeader = request.headers.get("cookie");
   const session = await getSession(cookieHeader);
 
@@ -21,18 +19,17 @@ export async function proxy(request: NextRequest) {
   const isAuthenticated = !!session && !!user;
   const userRole = user?.role as Role | undefined;
 
-  // 1. Redirect logged-in users away from auth pages
+
   if (pathname.startsWith("/login") || pathname.startsWith("/register")) {
     if (isAuthenticated) {
       let redirectTo = "/";
-      if (userRole === Roles.ADMIN) redirectTo = "/admin/dashboard";
-      else if (userRole === Roles.PROVIDER) redirectTo = "/provider/dashboard";
+      if (userRole === Roles.ADMIN)    redirectTo = "/admin";
+      if (userRole === Roles.PROVIDER) redirectTo = "/provider";
       return NextResponse.redirect(new URL(redirectTo, request.url));
     }
     return NextResponse.next();
   }
 
-  // 2. Unauthenticated → protect private routes
   if (!isAuthenticated) {
     const protectedPrefixes = [
       "/cart",
@@ -44,11 +41,7 @@ export async function proxy(request: NextRequest) {
       "/dashboard",
     ];
 
-    const isProtected = protectedPrefixes.some((prefix) =>
-      pathname.startsWith(prefix)
-    );
-
-    if (isProtected) {
+    if (protectedPrefixes.some((prefix) => pathname.startsWith(prefix))) {
       const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("redirect", pathname);
       return NextResponse.redirect(loginUrl);
@@ -57,7 +50,11 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // 3. Authenticated → role-based access control
+  if (pathname === "/") {
+    if (userRole === Roles.ADMIN)    return NextResponse.redirect(new URL("/admin", request.url));
+    if (userRole === Roles.PROVIDER) return NextResponse.redirect(new URL("/provider", request.url));
+  }
+
   if (userRole === Roles.CUSTOMER) {
     const forbidden = ["/provider", "/admin", "/dashboard"];
     if (forbidden.some((p) => pathname.startsWith(p))) {
@@ -66,23 +63,14 @@ export async function proxy(request: NextRequest) {
   }
 
   if (userRole === Roles.PROVIDER) {
-    if (pathname.startsWith("/admin")) {
-      return NextResponse.redirect(new URL("/provider/dashboard", request.url));
-    }
-    if (pathname === "/dashboard" || pathname === "/dashboard/") {
-      return NextResponse.redirect(new URL("/provider/dashboard", request.url));
+    if (pathname.startsWith("/admin") || pathname.startsWith("/dashboard")) {
+      return NextResponse.redirect(new URL("/provider", request.url));
     }
   }
 
   if (userRole === Roles.ADMIN) {
-    if (pathname === "/dashboard" || pathname === "/dashboard/") {
-      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
-    }
-    if (
-      pathname.startsWith("/provider") ||
-      pathname.startsWith("/dashboard/provider")
-    ) {
-      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+    if (pathname.startsWith("/provider") || pathname.startsWith("/dashboard")) {
+      return NextResponse.redirect(new URL("/admin", request.url));
     }
   }
 
@@ -91,13 +79,16 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
+    "/",       
     "/login",
     "/register",
     "/cart",
     "/checkout",
     "/orders/:path*",
     "/profile",
+    "/provider",
     "/provider/:path*",
+    "/admin",
     "/admin/:path*",
     "/dashboard/:path*",
   ],

@@ -60,7 +60,7 @@ export default async function ProvidersPage() {
               key={provider.id}
               className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full"
             >
-              <div className="relative w-full h-48 bg-gradient-to-br from-green-50 to-green-100 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center">
+              <div className="relative w-full h-48 bg-linear-to-br from-green-50 to-green-100 dark:from-gray-700 dark:to-gray-800 flex items-center justify-center">
                 <div className="text-center px-6">
                   <div className="w-20 h-20 mx-auto mb-3 rounded-full bg-green-200 dark:bg-green-800 flex items-center justify-center text-3xl font-bold text-green-700 dark:text-green-300">
                     {provider.restaurantName.charAt(0).toUpperCase()}

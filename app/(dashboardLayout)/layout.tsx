@@ -1,11 +1,25 @@
-import React from 'react';
+import { AppSidebar } from "@/components/app-sidebar"
+import {
+} from "@/components/ui/breadcrumb"
+import {
+    SidebarInset,
+    SidebarProvider,
+} from "@/components/ui/sidebar"
 
-const layout = ({children}: {children: React.ReactNode}) => {
+export default function Page({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
     return (
-        <div>
-            {children}
-        </div>
-    );
-};
-
-export default layout;
+        <SidebarProvider>
+            <AppSidebar />
+            <SidebarInset>
+                <hr className="border-gray-300 border mt-10"/>
+                <div className="flex flex-1 flex-col gap-4 p-4">
+                    {children}
+                </div>
+            </SidebarInset>
+        </SidebarProvider>
+    )
+}
