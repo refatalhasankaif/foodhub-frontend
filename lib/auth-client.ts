@@ -1,7 +1,10 @@
-import { createAuthClient } from "better-auth/react"
+import { createAuthClient } from "better-auth/react";
+
 export const authClient = createAuthClient({
-    baseURL: "https://foodhub-backend-3poi.onrender.com",  
-    fetchOptions: {
-        credentials: "include" // This is critical!
-    }
-})
+  baseURL: "", // ← empty or "/" → uses current origin (/api/auth proxy)
+  // baseURL: window.location.origin,  // alternative if you have SSR issues
+
+  fetchOptions: {
+    credentials: "include",
+  },
+});

@@ -60,7 +60,7 @@ export default async function MealsPage() {
                 )}
               </div>
 
-              <div className="p-6 flex flex-col flex-grow">
+              <div className="p-6 flex flex-col grow">
                 <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2 line-clamp-1">
                   {meal.name}
                 </h2>

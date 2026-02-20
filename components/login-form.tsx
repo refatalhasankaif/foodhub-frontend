@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { authClient } from "@/lib/auth-client"
 import { cn } from "@/lib/utils"
@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/card"
 import {
     Field,
-    FieldDescription,
     FieldGroup,
     FieldLabel,
 } from "@/components/ui/field"
@@ -23,33 +22,46 @@ import Link from "next/link"
 
 export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
     const router = useRouter()
+    const [isLoading, setIsLoading] = useState(false)
+    const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+
+        setIsLoading(true)
+        setErrorMsg(null)
 
         const formData = new FormData(e.currentTarget)
         const email = formData.get("email") as string
         const password = formData.get("password") as string
 
         if (!email || !password) {
-            alert("Email and password are required")
+            setErrorMsg("Email and password are required")
+            setIsLoading(false)
             return
         }
 
-        const { data, error } = await authClient.signIn.email({
-            email,
-            password,
-            rememberMe: true,
-            callbackURL: "/",
-        })
+        try {
+            const { data, error } = await authClient.signIn.email({
+                email,
+                password,
+                rememberMe: true,
+                callbackURL: "/",
+            })
 
-        if (error) {
-            console.error("Login error:", error.message)
-            alert(error.message)
-            return
+            if (error) {
+                console.error("Login error:", error.message)
+                setErrorMsg(error.message || "Failed to login")
+                setIsLoading(false)
+                return
+            }
+
+            router.push("/")
+        } catch (err) {
+            console.error("Unexpected error:", err)
+            setErrorMsg("An unexpected error occurred")
+            setIsLoading(false)
         }
-
-        router.push("/")
     }
 
     return (
@@ -62,6 +74,12 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
+                    {errorMsg && (
+                        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-center">
+                            {errorMsg}
+                        </div>
+                    )}
+
                     <form onSubmit={handleSubmit}>
                         <FieldGroup>
                             <Field>
@@ -72,6 +90,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
                                     type="email"
                                     placeholder="you@example.com"
                                     required
+                                    disabled={isLoading}
                                 />
                             </Field>
                             <Field>
@@ -81,10 +100,18 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
                                     id="password"
                                     type="password"
                                     required
+                                    disabled={isLoading}
                                 />
                             </Field>
                             <Field>
-                                <Button type="submit">Login</Button>
+                                <Button 
+                                    type="submit" 
+                                    disabled={isLoading}
+                                    className={`w-full ${isLoading ? "bg-gray-400 cursor-not-allowed" : ""}`}
+                                >
+                                    {isLoading ? "Logging in..." : "Login"}
+                                </Button>
+
                                 <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-4">
                                     Do not have an account? {" "}
                                     <Link href="/register" className="text-blue-600 hover:underline">
