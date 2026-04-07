@@ -1,6 +1,6 @@
 FoodHub – Full-Stack Project
 
-Live Site: https://foodhub-frontend-xi.vercel.app/
+Live Site: https://project-foodhub.vercel.app/
 
 FoodHub is a full-stack food ordering platform built with Next.js, TypeScript, Tailwind CSS, Node.js, Express, PostgreSQL, and Prisma.
 
